@@ -62,7 +62,6 @@ def setup_mpi_gpus():
     Set CUDA_VISIBLE_DEVICES using MPI.
     """
     available_gpus = guess_available_gpus()
-    # print("Avalible Gpu's :" , available)
 
     node_id = platform.node()
     nodes_ordered_by_rank = MPI.COMM_WORLD.allgather(node_id)
@@ -225,4 +224,3 @@ def tile_images(array, n_cols=None, max_images=None, div=1):
         return np.concatenate([cell(i, j) for j in range(n_cols)], axis=1)
 
     return np.concatenate([row(i) for i in range(n_rows)], axis=0)
-
