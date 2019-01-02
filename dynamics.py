@@ -67,7 +67,7 @@ class Dynamics(object):
     def calculate_loss(self, ob, last_ob, acs):
         n_chunks = 8
         n = ob.shape[0]
-        print("ob shape : "n)
+        print("ob shape : ", n)
         # print(" n // n_chunks : ")
         chunk_size = n // n_chunks
         print(" n // n_chunks : " , chunk_size)
