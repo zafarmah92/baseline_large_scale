@@ -224,3 +224,4 @@ def tile_images(array, n_cols=None, max_images=None, div=1):
         return np.concatenate([cell(i, j) for j in range(n_cols)], axis=1)
 
     return np.concatenate([row(i) for i in range(n_rows)], axis=0)
+
