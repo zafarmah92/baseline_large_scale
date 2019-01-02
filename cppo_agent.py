@@ -230,7 +230,7 @@ class PpoOptimizer(object):
 
 
 class RewardForwardFilter(object):
-        def __init__(self, gamma):
+    def __init__(self, gamma):
         self.rewems = None
         self.gamma = gamma
 
@@ -239,6 +239,7 @@ class RewardForwardFilter(object):
             self.rewems = rews
         else:
             self.rewems = self.rewems * self.gamma + rews
+        
         print("RewardForwardFilter : rewems {} , rews {} ".format(
             np.shape(self.rewems) , np.shape(rews)) )
 
