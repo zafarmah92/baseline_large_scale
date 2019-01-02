@@ -112,7 +112,6 @@ class PpoOptimizer(object):
         self.buf_rets = np.zeros((nenvs, self.rollout.nsteps), np.float32)
 
         if self.normrew:
-            print("function start_interaction()")
             self.rff = RewardForwardFilter(self.gamma)
             self.rff_rms = RunningMeanStd()
 
