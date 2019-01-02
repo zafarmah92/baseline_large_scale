@@ -29,6 +29,7 @@ class Rollout(object):
         self.buf_ext_rews = np.empty((nenvs, self.nsteps), np.float32)
         self.buf_acs = np.empty((nenvs, self.nsteps, *self.ac_space.shape), self.ac_space.dtype)
         self.buf_obs = np.empty((nenvs, self.nsteps, *self.ob_space.shape), self.ob_space.dtype)
+        print("Number of environment ", nenvs)
         # print("Buffer obersvation ", self.buf_obs)
         self.buf_obs_last = np.empty((nenvs, self.nsegs_per_env, *self.ob_space.shape), np.float32)
 

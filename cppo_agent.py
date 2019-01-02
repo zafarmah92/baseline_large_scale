@@ -44,6 +44,7 @@ class PpoOptimizer(object):
             self.use_news = use_news
             self.ext_coeff = ext_coeff
             self.int_coeff = int_coeff
+
             self.ph_adv = tf.placeholder(tf.float32, [None, None])
             self.ph_ret = tf.placeholder(tf.float32, [None, None])
             self.ph_rews = tf.placeholder(tf.float32, [None, None])
@@ -51,6 +52,7 @@ class PpoOptimizer(object):
             self.ph_oldvpred = tf.placeholder(tf.float32, [None, None])
             self.ph_lr = tf.placeholder(tf.float32, [])
             self.ph_cliprange = tf.placeholder(tf.float32, [])
+            
             neglogpac = self.stochpol.pd.neglogp(self.stochpol.ph_ac)
             entropy = tf.reduce_mean(self.stochpol.pd.entropy())
             vpred = self.stochpol.vpred
@@ -58,6 +60,7 @@ class PpoOptimizer(object):
             vf_loss = 0.5 * tf.reduce_mean((vpred - self.ph_ret) ** 2)
             ratio = tf.exp(self.ph_oldnlp - neglogpac)  # p_new / p_old
             negadv = - self.ph_adv
+
             pg_losses1 = negadv * ratio
             pg_losses2 = negadv * tf.clip_by_value(ratio, 1.0 - self.ph_cliprange, 1.0 + self.ph_cliprange)
             pg_loss_surr = tf.maximum(pg_losses1, pg_losses2)
@@ -88,6 +91,7 @@ class PpoOptimizer(object):
         self.all_visited_rooms = []
         self.all_scores = []
         self.nenvs = nenvs = len(env_fns)
+        print("cppo_agent : Number of nenvs : ",self.nenvs)
         self.nlump = nlump
         self.lump_stride = nenvs // self.nlump
         self.envs = [
