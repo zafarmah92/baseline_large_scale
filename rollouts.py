@@ -60,7 +60,7 @@ class Rollout(object):
     def calculate_reward(self):
         print("Calculate loss ")
         print(" buf_obs : {}  buf_obs_last : {} buf_acs : {} ".format(
-            self.buf_obs , self.buf_obs_last , self.buf_acs) )
+            np.shape(self.buf_obs) , np.shape(self.buf_obs_last) , np.shape(self.buf_acs )) )
         int_rew = self.dynamics.calculate_loss(ob=self.buf_obs,
                                                last_ob=self.buf_obs_last,
                                                acs=self.buf_acs)
