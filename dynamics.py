@@ -67,8 +67,12 @@ class Dynamics(object):
     def calculate_loss(self, ob, last_ob, acs):
         n_chunks = 8
         n = ob.shape[0]
+        print("ob shape : "n)
+        # print(" n // n_chunks : ")
         chunk_size = n // n_chunks
+        print(" n // n_chunks : " , chunk_size)
         assert n % n_chunks == 0
+
         sli = lambda i: slice(i * chunk_size, (i + 1) * chunk_size)
         return np.concatenate([getsess().run(self.loss,
                                              {self.obs: ob[sli(i)], self.last_ob: last_ob[sli(i)],
