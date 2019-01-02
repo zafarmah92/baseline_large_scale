@@ -143,7 +143,7 @@ class PpoOptimizer(object):
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
             print(" cppo_agent ,rewards {}  rollout.buf_rews {} rff_rms.var  {}".format(
-                np.shape(rewsw) , np.shape(self.rollout.buf_rews) , np.shape(np.sqrt(self.rff_rms.var))))
+                np.shape(rews) , np.shape(self.rollout.buf_rews) , np.shape(np.sqrt(self.rff_rms.var))))
         else:
             rews = np.copy(self.rollout.buf_rews)
         self.calculate_advantages(rews=rews, use_news=self.use_news, gamma=self.gamma, lam=self.lam)
