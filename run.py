@@ -9,9 +9,9 @@ from functools import partial
 
 import gym
 import tensorflow as tf
-from baselines.baselines import logger
-from baselines.baselines.bench import Monitor
-from baselines.baselines.common.atari_wrappers import NoopResetEnv, FrameStack
+from baselines import logger
+from baselines.bench import Monitor
+from baselines.common.atari_wrappers import NoopResetEnv, FrameStack
 from mpi4py import MPI
 
 from auxiliary_tasks import FeatureExtractor, InverseDynamics, VAE, JustPixels
