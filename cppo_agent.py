@@ -249,7 +249,7 @@ class RewardForwardFilter(object):
         else:
             self.rewems = self.rewems * self.gamma + rews
         print("RewardForwardFilter , self.rewems {} ".format(
-            np.shape(self.rewems) ))
+            self.rewems) )
 
-        print("RewardForwardFilter , rews {}".format(np.shape(rews)))
+        print("RewardForwardFilter , rews {}".format(rews))
         return self.rewems
