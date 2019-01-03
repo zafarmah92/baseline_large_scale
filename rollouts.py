@@ -62,6 +62,7 @@ class Rollout(object):
                                                acs=self.buf_acs)
         print("calculate_reward :  intresic reward {}  extrinsic reward {} ".format(
             np.shape(int_rew) , np.shape(self.buf_ext_rews)))
+        print("intresic reward ", int_rew)
         self.buf_rews[:] = self.reward_fun(int_rew=int_rew, ext_rew=self.buf_ext_rews)
 
     def rollout_step(self):
