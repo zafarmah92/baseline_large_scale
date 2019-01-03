@@ -138,15 +138,20 @@ class PpoOptimizer(object):
     def update(self):
         if self.normrew: # normalize reward 
 
-            rffs = np.array([self.rff.update(rew) for rew in self.rollout.buf_rews.T])
+            rffs = np.array([self.rff.update(rew) for rew in self.rollout.buf_rews.T]) # shape (128,8)
             print("update : received rff in update , rffs ",np.shape(rffs))
-            print("update : numpy.ravel shape ",np.shape(rffs.ravel()))
+            print("update : numpy.ravel shape ",np.shape(rffs.ravel())) # shape (128,8) = 1024
             # this is the standing point
             # > sending flattened shape of all the rewards from all env's of each step (128)
+            # > MPI moments received flattened of shape (1024,)
             rffs_mean, rffs_std, rffs_count = mpi_moments(rffs.ravel())
+
+            print("update : rffs_mean {} , rffs_std {} , rffs_count {} ".format(
+                np.shape(rffs_mean),np.shape(rffs_std),np.shape(rffs_count)))
             
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
+            
         else:
             rews = np.copy(self.rollout.buf_rews)
         self.calculate_advantages(rews=rews, use_news=self.use_news, gamma=self.gamma, lam=self.lam)
