@@ -247,9 +247,13 @@ class RewardForwardFilter(object):
         if self.rewems is None:
             self.rewems = rews
         else:
-            self.rewems = self.rewems * self.gamma + rews
-        print("RewardForwardFilter , self.rewems {} ".format(
+            print("RewardForwardFilter , self.rewems {} ".format(
             self.rewems) )
 
-        print("RewardForwardFilter , rews {}".format(rews))
+            print("RewardForwardFilter , rews {}".format(rews))
+            self.rewems = self.rewems * self.gamma + rews
+        # print("RewardForwardFilter , self.rewems {} ".format(
+            # self.rewems) )
+
+        # print("RewardForwardFilter , rews {}".format(rews))
         return self.rewems
