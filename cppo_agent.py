@@ -155,7 +155,8 @@ class PpoOptimizer(object):
             
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
-            print(" update :  final rews ",np.shape(rews))
+            print(" update :  final rews {} rff_rms.var {} ".format(
+                np.shape(rews) , np.shape(self.rff_rms.var)))
 
         else:
             rews = np.copy(self.rollout.buf_rews)
