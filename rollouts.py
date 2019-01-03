@@ -66,9 +66,9 @@ class Rollout(object):
         t = self.step_count % self.nsteps
         s = t % self.nsteps_per_seg
         for l in range(self.nlumps):
-            obs, prevrews, news, infos = self.env_get(l)
-            print(" obs {}  prevrews {} news {} info {} ".format(
-                np.shape(obs) , np.shape(prevrews) ,  np.shape(news) , np.shape(infos)))
+            obs, prevrews, news, infos = self.env_get(l) # obs , reward , done , infos
+            print(" rollout_step :  obs {}  prevrews {} news {} info {} ".format(
+                np.shape(obs) , prevrews  ,  news , np.shape(infos)))
             # if t > 0:
             #     prev_feat = self.prev_feat[l]
             #     prev_acs = self.prev_acs[l]
