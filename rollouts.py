@@ -63,9 +63,10 @@ class Rollout(object):
         print("calculate_reward :  intresic reward {}  extrinsic reward {} ".format(
             np.shape(int_rew) , np.shape(self.buf_ext_rews)))
         # print("intresic reward ", int_rew)
-        print("extrinsic reward ",self.buf_ext_rews)
+        # print("extrinsic reward ",self.buf_ext_rews)
         # > this is the reward that is used for learning 
         self.buf_rews[:] = self.reward_fun(int_rew=int_rew, ext_rew=self.buf_ext_rews)
+        print("calculate reward : buf_rews ", np.shape(self.buf_rews))
 
     def rollout_step(self):
         t = self.step_count % self.nsteps
