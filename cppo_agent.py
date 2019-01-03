@@ -138,6 +138,9 @@ class PpoOptimizer(object):
     def update(self):
         if self.normrew: # normalize reward 
 
+            # > rffs is the intrensic reward from rollouts 
+            # > also rff.update (rew) passed each row of inc_reward  
+            # > where it gets  self.rewems = self.rewems * self.gamma + rews  
             rffs = np.array([self.rff.update(rew) for rew in self.rollout.buf_rews.T]) # shape (128,8)
             print("update : received rff in update , rffs ",np.shape(rffs))
             print("update : numpy.ravel shape ",np.shape(rffs.ravel())) # shape (128,8) = 1024
@@ -149,8 +152,10 @@ class PpoOptimizer(object):
             print("update : rffs_mean {} , rffs_std {} , rffs_count {} ".format(
                 np.shape(rffs_mean),np.shape(rffs_std),np.shape(rffs_count)))
             # > single value received or all these three 
+            
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
+            print(" update :  final rews ",np.shape(rews))
 
         else:
             rews = np.copy(self.rollout.buf_rews)
@@ -247,11 +252,12 @@ class RewardForwardFilter(object):
         if self.rewems is None:
             self.rewems = rews
         else:
+            
+
+            # print("RewardForwardFilter , rews {}".format(rews))
+            self.rewems = self.rewems * self.gamma + rews
             print("RewardForwardFilter , self.rewems {} ".format(
             self.rewems) )
-
-            print("RewardForwardFilter , rews {}".format(rews))
-            self.rewems = self.rewems * self.gamma + rews
         # print("RewardForwardFilter , self.rewems {} ".format(
             # self.rewems) )
 
