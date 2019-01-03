@@ -108,7 +108,9 @@ class PpoOptimizer(object):
         self.buf_rets = np.zeros((nenvs, self.rollout.nsteps), np.float32)
 
         if self.normrew:
+            print("Calling RewardForwardFilter from start_interaction")
             self.rff = RewardForwardFilter(self.gamma)
+            print(" received self.rff " , np.shape(self.rff))
             self.rff_rms = RunningMeanStd()
 
         self.step_count = 0
@@ -233,4 +235,6 @@ class RewardForwardFilter(object):
             self.rewems = rews
         else:
             self.rewems = self.rewems * self.gamma + rews
+        print("RewardForwardFilter , self.rewems {} rews {}".format(
+            np.shape(self.rewems) , np.shape(rews)))
         return self.rewems
