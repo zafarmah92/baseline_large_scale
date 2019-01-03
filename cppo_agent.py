@@ -112,6 +112,7 @@ class PpoOptimizer(object):
             self.rff = RewardForwardFilter(self.gamma)
             print(" received self.rff " , np.shape(self.rff))
             self.rff_rms = RunningMeanStd()
+            print( "received rff_rms mean std ",np.shape(self.rff_rms))
 
         self.step_count = 0
         self.t_last_update = time.time()
@@ -135,9 +136,15 @@ class PpoOptimizer(object):
         self.buf_rets[:] = self.buf_advs + self.rollout.buf_vpreds
 
     def update(self):
-        if self.normrew:
+        if self.normrew: # normalize reward 
+
             rffs = np.array([self.rff.update(rew) for rew in self.rollout.buf_rews.T])
+            print("received rff in update , rffs ",np.shape(rffs))
+            print("numpy.ravel shape ",np.shape(rffs.ravel))
+            # this is the standing point
+            # > sending flattened shape of all the rewards from all env's of each step (128)
             rffs_mean, rffs_std, rffs_count = mpi_moments(rffs.ravel())
+            
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
         else:
