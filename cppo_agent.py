@@ -148,10 +148,10 @@ class PpoOptimizer(object):
 
             print("update : rffs_mean {} , rffs_std {} , rffs_count {} ".format(
                 np.shape(rffs_mean),np.shape(rffs_std),np.shape(rffs_count)))
-            
+            # > single value received or all these three 
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
-            
+
         else:
             rews = np.copy(self.rollout.buf_rews)
         self.calculate_advantages(rews=rews, use_news=self.use_news, gamma=self.gamma, lam=self.lam)
@@ -248,6 +248,8 @@ class RewardForwardFilter(object):
             self.rewems = rews
         else:
             self.rewems = self.rewems * self.gamma + rews
-        print("RewardForwardFilter , self.rewems {} rews {}".format(
-            np.shape(self.rewems) , np.shape(rews)))
+        print("RewardForwardFilter , self.rewems {} ".format(
+            np.shape(self.rewems) ))
+
+        print("RewardForwardFilter , rews {}".format(np.shape(rews)))
         return self.rewems
