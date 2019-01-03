@@ -139,8 +139,8 @@ class PpoOptimizer(object):
         if self.normrew: # normalize reward 
 
             rffs = np.array([self.rff.update(rew) for rew in self.rollout.buf_rews.T])
-            print("received rff in update , rffs ",np.shape(rffs))
-            print("numpy.ravel shape ",np.shape(rffs.ravel))
+            print("update : received rff in update , rffs ",np.shape(rffs))
+            print("update : numpy.ravel shape ",np.shape(rffs.ravel()))
             # this is the standing point
             # > sending flattened shape of all the rewards from all env's of each step (128)
             rffs_mean, rffs_std, rffs_count = mpi_moments(rffs.ravel())
@@ -232,6 +232,7 @@ class PpoOptimizer(object):
         self.stochpol.set_var_values(vv)
 
 
+# discounted reward 
 class RewardForwardFilter(object):
     def __init__(self, gamma):
         self.rewems = None
