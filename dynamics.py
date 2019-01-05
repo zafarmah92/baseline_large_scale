@@ -76,8 +76,8 @@ class Dynamics(object):
         print("dynamics , calculate_loss : slice {} , chunk_size {} ".format(
             sli , chunk_size))
         for i in range(n_chunks):
-            print("dynamics , calculate_loss : obs {} , last_obs {} , actions {} ".format(
-            np.shape(ob[sli(i)]) , np.shape(last_ob[sli(i)])  , np.shape(acs[sli(i)])))
+            print("dynamics , calculate_loss : slice {}  obs {} , last_obs {} , actions {} ".format(
+            sli(i),np.shape(ob[sli(i)]) , np.shape(last_ob[sli(i)])  , np.shape(acs[sli(i)])))
         # > testing
 
         return np.concatenate([getsess().run(self.loss,
