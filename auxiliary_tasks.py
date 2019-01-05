@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 from utils import small_convnet, fc, activ, flatten_two_dims, unflatten_first_dim, small_deconvnet
-
+import numpy as np
 
 class FeatureExtractor(object):
     def __init__(self, policy, features_shared_with_policy, feat_dim=None, layernormalize=None,
@@ -22,7 +22,7 @@ class FeatureExtractor(object):
             self.last_ob = tf.placeholder(dtype=tf.int32,
                                           shape=(None, 1) + self.ob_space.shape, name='last_ob')
             print("FeatureExtractor init self.last_ob {} , self.ob_space.shape {} ".format(
-                np.shape(self.last_ob),np.shape( self.ob_space.shape)) )
+                np.shape(self.last_ob) , np.shape(self.ob_space.shape) ))
             self.next_ob = tf.concat([self.obs[:, 1:], self.last_ob], 1)
 
             if features_shared_with_policy:
