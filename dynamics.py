@@ -13,6 +13,7 @@ class Dynamics(object):
         self.feat_dim = feat_dim
         self.obs = self.auxiliary_task.obs
         self.last_ob = self.auxiliary_task.last_ob
+        print("Dynamics init : self.last_ob ",np.shape(self.last_ob))
         self.ac = self.auxiliary_task.ac
         self.ac_space = self.auxiliary_task.ac_space
         self.ob_mean = self.auxiliary_task.ob_mean
