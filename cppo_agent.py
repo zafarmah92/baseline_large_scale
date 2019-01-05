@@ -123,9 +123,9 @@ class PpoOptimizer(object):
             env.close()
 
     def calculate_advantages(self, rews, use_news, gamma, lam):
-        nsteps = self.rollout.nsteps
-        lastgaelam = 0
-        for t in range(nsteps - 1, -1, -1):  # nsteps-2 ... 0
+        nsteps = self.rollout.nsteps # 128
+        lastgaelam = 0 # lambda 
+        for t in range(nsteps - 1, -1, -1):  # nsteps-2 ... 0 # 128 - 2 , ... , 0 
             nextnew = self.rollout.buf_news[:, t + 1] if t + 1 < nsteps else self.rollout.buf_new_last
             if not use_news:
                 nextnew = 0
@@ -161,6 +161,8 @@ class PpoOptimizer(object):
 
         else:
             rews = np.copy(self.rollout.buf_rews)
+        # > rews are the rewards (8,128)
+        # > use_news = 0 ; gamma = 0.99 ; lambda =  0.95
         self.calculate_advantages(rews=rews, use_news=self.use_news, gamma=self.gamma, lam=self.lam)
 
         info = dict(
@@ -258,8 +260,8 @@ class RewardForwardFilter(object):
 
             # print("RewardForwardFilter , rews {}".format(rews))
             self.rewems = self.rewems * self.gamma + rews
-            print("RewardForwardFilter , self.rewems {} ".format(
-            self.rewems) )
+            # print("RewardForwardFilter , self.rewems {} ".format(
+            # self.rewems) )
         # print("RewardForwardFilter , self.rewems {} ".format(
             # self.rewems) )
 

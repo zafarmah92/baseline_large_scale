@@ -64,15 +64,24 @@ class Dynamics(object):
             x = unflatten_first_dim(x, sh)
         return tf.reduce_mean((x - tf.stop_gradient(self.out_features)) ** 2, -1)
 
-    def calculate_loss(self, ob, last_ob, acs):
+    def calculate_loss(self, ob, last_ob, acs): # s_t+1 (), s_t , a_t 
         n_chunks = 8
-        n = ob.shape[0]
+        n = ob.shape[0] 
+        # > number of parallel environments
         chunk_size = n // n_chunks
         assert n % n_chunks == 0
         sli = lambda i: slice(i * chunk_size, (i + 1) * chunk_size)
+        
+        # > testing
+        print("dynamics , calculate_loss : slice {} , chunk_size {} ".format(
+            sli , chunk_size))
+        for i in range(n_chunks):
+            print("dynamics , calculate_loss : obs {} , last_obs {} , actions {} ".format(
+            np.shape(ob[sli(i)]) , np.shape(last_ob[sli(i)])  , np.shape(acs[sli(i)])))
+        # > testing
+
         return np.concatenate([getsess().run(self.loss,
-                                             {self.obs: ob[sli(i)], self.last_ob: last_ob[sli(i)],
-                                              self.ac: acs[sli(i)]}) for i in range(n_chunks)], 0)
+            {self.obs: ob[sli(i)],self.last_ob: last_ob[sli(i)],self.ac: acs[sli(i)]})for i in range(n_chunks)], 0)
 
 
 class UNet(Dynamics):
