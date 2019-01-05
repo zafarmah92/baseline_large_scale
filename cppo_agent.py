@@ -157,6 +157,7 @@ class PpoOptimizer(object):
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
             print(" update :  final rews {} rff_rms.var {} ".format(
                 np.shape(rews) , np.shape(self.rff_rms.var)))
+            # > rews is (8,128) and  self.rff_rms.var is a single value
 
         else:
             rews = np.copy(self.rollout.buf_rews)

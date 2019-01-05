@@ -57,6 +57,9 @@ class Rollout(object):
         self.update_info()
 
     def calculate_reward(self):
+
+        print("Calculate_reward :  self.buf_obs {} , self.buf_obs_last {} , self.buf_acs {}".format(
+            np.shape(self.buf_obs) , np.shape(self.buf_obs_last)  , np.shape(self.buf_acs)) )
         int_rew = self.dynamics.calculate_loss(ob=self.buf_obs,
                                                last_ob=self.buf_obs_last,
                                                acs=self.buf_acs)
@@ -67,11 +70,14 @@ class Rollout(object):
         # > this is the reward that is used for learning 
         self.buf_rews[:] = self.reward_fun(int_rew=int_rew, ext_rew=self.buf_ext_rews)
         print("calculate reward : buf_rews ", self.buf_rews)
+        # > it takes the intensic reward 
 
     def rollout_step(self):
         t = self.step_count % self.nsteps
         s = t % self.nsteps_per_seg
         for l in range(self.nlumps):
+
+
             obs, prevrews, news, infos = self.env_get(l) # > obs , reward , done , infos
             # print(" rollout_step :  obs {}  prevrews {} news {} info {} ".format(
                 # np.shape(obs) , prevrews  ,  news , np.shape(infos)))
