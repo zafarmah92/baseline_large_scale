@@ -18,7 +18,7 @@ class FeatureExtractor(object):
         self.ob_mean = self.policy.ob_mean
         self.ob_std = self.policy.ob_std
         with tf.variable_scope(scope):
-            print("FeatureExtractor init " , )
+            # print("FeatureExtractor init " , )
             self.last_ob = tf.placeholder(dtype=tf.int32,
                                           shape=(None, 1) + self.ob_space.shape, name='last_ob')
             print("FeatureExtractor init self.last_ob {} , self.ob_space.shape {} ".format(

@@ -42,9 +42,15 @@ class Dynamics(object):
         return x
 
     def get_loss(self):
+        # print(" Dynamics frd get_loss : self.ac {} , self.ac_space.n {}")
         ac = tf.one_hot(self.ac, self.ac_space.n, axis=2)
+
+        print(" Dynamics frd get_loss : self.ac {} , self.ac_space.n {} , ac {} ".
+            format( np.shape( self.ac ),np.shape( self.ac_space.n ),np.shape(ac) ))
         sh = tf.shape(ac)
         ac = flatten_two_dims(ac)
+
+        print(" Dynamics frd get_loss : sh {} , ac {} ".format(np.shape(sh) , np.shape(ac)))
 
         def add_ac(x):
             return tf.concat([x, ac], axis=-1)
