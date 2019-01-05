@@ -67,8 +67,11 @@ class Dynamics(object):
             for _ in range(4):
                 x = residual(x)
             n_out_features = self.out_features.get_shape()[-1].value
+            print(" Dynamics frd loss : n_out_features {} ",np.shape(n_out_features))
             x = tf.layers.dense(add_ac(x), n_out_features, activation=None)
             x = unflatten_first_dim(x, sh)
+            print(" Dynamics frd loss : x unflatten_first_dim {} ",np.shape(x))
+            
         return tf.reduce_mean((x - tf.stop_gradient(self.out_features)) ** 2, -1)
 
     def calculate_loss(self, ob, last_ob, acs): # s_t+1 (), s_t , a_t 
