@@ -70,8 +70,8 @@ class Dynamics(object):
             print(" Dynamics frd loss : n_out_features ",np.shape(n_out_features))
             x = tf.layers.dense(add_ac(x), n_out_features, activation=None)
             x = unflatten_first_dim(x, sh)
-            # print(" Dynamics frd loss : x unflatten_first_dim {} , self.out_features {}".
-                # format(np.shape(x)) , np.shape(self.out_features))
+            print(" Dynamics frd loss : x unflatten_first_dim {} , self.out_features {}".
+                format(tf.shape(x)) , tf.shape(self.out_features))
             
         return tf.reduce_mean((x - tf.stop_gradient(self.out_features)) ** 2, -1)
 
