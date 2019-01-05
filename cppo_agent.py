@@ -202,6 +202,8 @@ class PpoOptimizer(object):
             (self.ph_ret, resh(self.buf_rets)),
             (self.ph_adv, resh(self.buf_advs)),
         ]
+        print("cppo agent, update :  self.rollout.buf_obs_last " , 
+            np.shape(self.rollout.buf_obs_last.reshape([self.nenvs * self.nsegs_per_env, 1, *self.ob_space.shape])) )
         ph_buf.extend([
             (self.dynamics.last_ob,
              self.rollout.buf_obs_last.reshape([self.nenvs * self.nsegs_per_env, 1, *self.ob_space.shape]))
