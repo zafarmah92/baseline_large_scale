@@ -130,7 +130,7 @@ class PpoOptimizer(object):
             if not use_news:
                 nextnew = 0
             nextvals = self.rollout.buf_vpreds[:, t + 1] if t + 1 < nsteps else self.rollout.buf_vpred_last
-            print("calculate_advantages : nextvals ", np.shape(nextvals))
+            # print("calculate_advantages : nextvals ", np.shape(nextvals))
             nextnotnew = 1 - nextnew
             delta = rews[:, t] + gamma * nextvals * nextnotnew - self.rollout.buf_vpreds[:, t]
             self.buf_advs[:, t] = lastgaelam = delta + gamma * lam * nextnotnew * lastgaelam
@@ -184,6 +184,7 @@ class PpoOptimizer(object):
         if self.normadv:
             m, s = get_mean_and_std(self.buf_advs)
             self.buf_advs = (self.buf_advs - m) / (s + 1e-7)
+        print("advantage normalization : ",np.shape(self.buf_advs))
         envsperbatch = (self.nenvs * self.nsegs_per_env) // self.nminibatches
         envsperbatch = max(1, envsperbatch)
         envinds = np.arange(self.nenvs * self.nsegs_per_env)
