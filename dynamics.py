@@ -48,9 +48,10 @@ class Dynamics(object):
         print(" Dynamics frd get_loss : self.ac {} , self.ac_space.n {} , ac {} ".
             format( np.shape( self.ac ),np.shape( self.ac_space.n ),np.shape(ac) ))
         sh = tf.shape(ac)
+
         ac = flatten_two_dims(ac)
 
-        print(" Dynamics frd get_loss : sh {} , ac {} ".format(np.shape(sh) , np.shape(ac)))
+        print(" Dynamics frd get_loss tf shape: sh {} , ac {} ".format(tf.shape(sh) , tf.shape(ac)))
 
         def add_ac(x):
             return tf.concat([x, ac], axis=-1)
@@ -67,7 +68,7 @@ class Dynamics(object):
             for _ in range(4):
                 x = residual(x)
             n_out_features = self.out_features.get_shape()[-1].value
-            print(" Dynamics frd loss : n_out_features ",np.shape(n_out_features))
+            print(" Dynamics frd loss : n_out_features ",tf.shape(n_out_features))
             x = tf.layers.dense(add_ac(x), n_out_features, activation=None)
             x = unflatten_first_dim(x, sh)
             # print(" Dynamics frd loss : x unflatten_first_dim {} , self.out_features {}".
