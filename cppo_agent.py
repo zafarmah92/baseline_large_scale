@@ -130,6 +130,7 @@ class PpoOptimizer(object):
             if not use_news:
                 nextnew = 0
             nextvals = self.rollout.buf_vpreds[:, t + 1] if t + 1 < nsteps else self.rollout.buf_vpred_last
+            print("calculate_advantages : nextvals ", np.shape(nextvals))
             nextnotnew = 1 - nextnew
             delta = rews[:, t] + gamma * nextvals * nextnotnew - self.rollout.buf_vpreds[:, t]
             self.buf_advs[:, t] = lastgaelam = delta + gamma * lam * nextnotnew * lastgaelam
@@ -204,6 +205,7 @@ class PpoOptimizer(object):
         ]
         print("cppo agent, update :  self.rollout.buf_obs_last " , 
             np.shape(self.rollout.buf_obs_last.reshape([self.nenvs * self.nsegs_per_env, 1, *self.ob_space.shape])) )
+        
         ph_buf.extend([
             (self.dynamics.last_ob,
              self.rollout.buf_obs_last.reshape([self.nenvs * self.nsegs_per_env, 1, *self.ob_space.shape]))
