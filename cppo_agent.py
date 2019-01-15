@@ -72,7 +72,7 @@ class PpoOptimizer(object):
 
     def start_interaction(self, env_fns, dynamics, nlump=2):
         self.loss_names, self._losses = zip(*list(self.to_report.items()))
-        pritn(" start_interaction : self.loss_names ",self.loss_names)
+        print(" start_interaction : self.loss_names ",self.loss_names)
 
         params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
         print("start start_interaction : TRAINABLE_VARIABLES " , params)
