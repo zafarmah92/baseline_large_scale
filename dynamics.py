@@ -19,8 +19,10 @@ class Dynamics(object):
         self.ob_mean = self.auxiliary_task.ob_mean
         self.ob_std = self.auxiliary_task.ob_std
         if predict_from_pixels:
+            print("Dynamics init : predict from pixels ")
             self.features = self.get_features(self.obs, reuse=False)
         else:
+            print("Dynamics init : else, features of something " , np.shape(self.auxiliary_task.features))
             self.features = tf.stop_gradient(self.auxiliary_task.features)
 
         self.out_features = self.auxiliary_task.next_features
