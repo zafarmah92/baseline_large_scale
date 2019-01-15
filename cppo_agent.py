@@ -72,8 +72,10 @@ class PpoOptimizer(object):
 
     def start_interaction(self, env_fns, dynamics, nlump=2):
         self.loss_names, self._losses = zip(*list(self.to_report.items()))
+        pritn(" start_interaction : self.loss_names ",self.loss_names)
 
         params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
+        print("start start_interaction : TRAINABLE_VARIABLES " , params)
         if MPI.COMM_WORLD.Get_size() > 1:
             trainer = MpiAdamOptimizer(learning_rate=self.ph_lr, comm=MPI.COMM_WORLD)
         else:
@@ -184,6 +186,7 @@ class PpoOptimizer(object):
         if self.normadv:
             m, s = get_mean_and_std(self.buf_advs)
             self.buf_advs = (self.buf_advs - m) / (s + 1e-7)
+        # norm_advs shape (8,128)
         print("advantage normalization : ",np.shape(self.buf_advs))
         envsperbatch = (self.nenvs * self.nsegs_per_env) // self.nminibatches
         envsperbatch = max(1, envsperbatch)

@@ -18,7 +18,7 @@ class FeatureExtractor(object):
         self.ob_mean = self.policy.ob_mean
         self.ob_std = self.policy.ob_std
         with tf.variable_scope(scope):
-            # print("FeatureExtractor init " , )
+            
             self.last_ob = tf.placeholder(dtype=tf.int32,
                                           shape=(None, 1) + self.ob_space.shape, name='last_ob')
             print("FeatureExtractor init self.last_ob {} , self.ob_space.shape {} ".format(
@@ -62,6 +62,7 @@ class InverseDynamics(FeatureExtractor):
                                               feat_dim=feat_dim, layernormalize=layernormalize)
 
     def get_loss(self):
+        print("InverseDynamics : called get_loss ")
         with tf.variable_scope(self.scope):
             x = tf.concat([self.features, self.next_features], 2)
             sh = tf.shape(x)
@@ -70,7 +71,9 @@ class InverseDynamics(FeatureExtractor):
             x = fc(x, units=self.ac_space.n, activation=None)
             param = unflatten_first_dim(x, sh)
             idfpd = self.policy.ac_pdtype.pdfromflat(param)
-            return idfpd.neglogp(self.ac)
+            sol = idfpd.neglogp(self.ac)
+            print(" IDF prediction shape : ",np.shape(sol))
+            return sol
 
 
 class VAE(FeatureExtractor):
