@@ -102,6 +102,7 @@ class Trainer(object):
         env = self.make_env(0, add_monitor=False)
         self.ob_space, self.ac_space = env.observation_space, env.action_space
         self.ob_mean, self.ob_std = random_agent_ob_mean_std(env)
+        print("Received mean and standard Deviation mean {} ,  std {}".format(self.ob_mean,self.ob_std))
         del env
         self.envs = [functools.partial(self.make_env, i) for i in range(self.envs_per_process)]
 
