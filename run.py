@@ -42,6 +42,7 @@ class Trainer(object):
         self.hps = hps
         self.envs_per_process = envs_per_process
         self.num_timesteps = num_timesteps
+        print("not 1000 ste Env is getting callled ")
         self._set_env_vars()
 
         self.policy = CnnPolicy(
