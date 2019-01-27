@@ -132,6 +132,12 @@ def add_pos_bias(x):
 
 
 def small_convnet(x, nl, feat_dim, last_nl, layernormalize, batchnorm=False):
+    print(" small_convnet parameters  \n\n")
+    # > nl = RELU
+    # > feat_dim = 512
+    # > last_nl = False
+    # > layernormalize = False
+    # > batchNorm = False
     bn = tf.layers.batch_normalization if batchnorm else lambda x: x
     x = bn(tf.layers.conv2d(x, filters=32, kernel_size=8, strides=(4, 4), activation=nl))
     x = bn(tf.layers.conv2d(x, filters=64, kernel_size=4, strides=(2, 2), activation=nl))
@@ -141,6 +147,7 @@ def small_convnet(x, nl, feat_dim, last_nl, layernormalize, batchnorm=False):
     if last_nl is not None:
         x = last_nl(x)
     if layernormalize:
+        print(" Layer Normalization ")
         x = layernorm(x)
     return x
 

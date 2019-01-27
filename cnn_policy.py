@@ -10,7 +10,7 @@ class CnnPolicy(object):
         if layernormalize:
             print("Warning: policy is operating on top of layer-normed features. It might slow down the training.")
         self.layernormalize = layernormalize
-        self.nl = nl
+        self.nl = nl  # non linearity
         self.ob_mean = ob_mean
         self.ob_std = ob_std
         with tf.variable_scope(scope):
