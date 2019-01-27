@@ -42,7 +42,7 @@ class Trainer(object):
         self.hps = hps
         self.envs_per_process = envs_per_process
         self.num_timesteps = num_timesteps
-        print("not 1000 ste Env is getting callled ")
+        print("now 1000 ste Env is getting callled ")
         self._set_env_vars()
 
         self.policy = CnnPolicy(
@@ -100,6 +100,7 @@ class Trainer(object):
         self.agent.to_report['feat_var'] = tf.reduce_mean(tf.nn.moments(self.feature_extractor.features, [0, 1])[1])
 
     def _set_env_vars(self):
+        print("Now with rank 0 and false monitor")
         env = self.make_env(0, add_monitor=False)
         self.ob_space, self.ac_space = env.observation_space, env.action_space
         self.ob_mean, self.ob_std = random_agent_ob_mean_std(env)
@@ -121,7 +122,7 @@ class Trainer(object):
 
 
 def make_env_all_params(rank, add_monitor, args):
-    print("its called with rank {} add_monitor {}".format(rank,add_monitor))
+    print("Make env is called with rank {} add_monitor {}".format(rank,add_monitor))
     if args["env_kind"] == 'atari':
         env = gym.make(args['env'])
         assert 'NoFrameskip' in env.spec.id
