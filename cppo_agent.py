@@ -185,6 +185,7 @@ class PpoOptimizer(object):
         # normalize advantages
         if self.normadv:
             m, s = get_mean_and_std(self.buf_advs)
+            print("Normalize ADV batch buffer shape : ",np.shape(self.buf_advs))
             self.buf_advs = (self.buf_advs - m) / (s + 1e-7)
         # norm_advs shape (8,128)
         print("advantage normalization : ",np.shape(self.buf_advs))
