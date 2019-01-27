@@ -88,8 +88,9 @@ def random_agent_ob_mean_std(env, nsteps=10000):
     ob = np.asarray(env.reset())
     if MPI.COMM_WORLD.Get_rank() == 0:
         obs = [ob]
+        print("::: Entered the random action for 1000 steps ::: ")
         for _ in range(nsteps):
-            ac = env.action_space.sample()
+            ac = env.action_space.sample() # random action 
             ob, _, done, _ = env.step(ac)
             if done:
                 ob = env.reset()
