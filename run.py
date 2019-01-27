@@ -120,6 +120,7 @@ class Trainer(object):
 
 
 def make_env_all_params(rank, add_monitor, args):
+    print("its called with rank {} add_monitor {}".format(rank,add_monitor))
     if args["env_kind"] == 'atari':
         env = gym.make(args['env'])
         assert 'NoFrameskip' in env.spec.id
