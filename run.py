@@ -25,7 +25,9 @@ from wrappers import MontezumaInfoWrapper, make_mario_env, make_robo_pong, make_
 
 
 def start_experiment(**args):
+    print("start_experiment called  ")
     make_env = partial(make_env_all_params, add_monitor=True, args=args)
+    print("start_experiment return ")
 
     trainer = Trainer(make_env=make_env,
                       num_timesteps=args['num_timesteps'], hps=args,
@@ -39,6 +41,7 @@ def start_experiment(**args):
 
 class Trainer(object):
     def __init__(self, make_env, hps, num_timesteps, envs_per_process):
+        print("Trainer __init__ is called ")
         self.make_env = make_env
         self.hps = hps
         self.envs_per_process = envs_per_process
@@ -101,13 +104,14 @@ class Trainer(object):
         self.agent.to_report['feat_var'] = tf.reduce_mean(tf.nn.moments(self.feature_extractor.features, [0, 1])[1])
 
     def _set_env_vars(self):
-        print("Now with rank 0 and false monitor")
+        print("Function _set_env_vars is called ")
         env = self.make_env(0, add_monitor=False)
         self.ob_space, self.ac_space = env.observation_space, env.action_space
         self.ob_mean, self.ob_std = random_agent_ob_mean_std(env)
         print("Received mean and standard Deviation mean {} ,  std {}".format(self.ob_mean,self.ob_std))
         del env
         self.envs = [functools.partial(self.make_env, i) for i in range(self.envs_per_process)]
+        # > stacking the number of parallel workers 
         print("Type and self.envs object type {} and  len {}".format(type(self.envs) , np.shape(self.envs)))
 
     def train(self):
@@ -124,7 +128,8 @@ class Trainer(object):
 
 
 def make_env_all_params(rank, add_monitor, args):
-    print("Make env is called with rank {} add_monitor {}".format(rank,add_monitor))
+
+    print("make_env_all_params called with rank {} add_monitor {}".format(rank,add_monitor))
     if args["env_kind"] == 'atari':
         env = gym.make(args['env'])
         assert 'NoFrameskip' in env.spec.id
