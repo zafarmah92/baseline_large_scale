@@ -107,6 +107,7 @@ class Trainer(object):
         print("Received mean and standard Deviation mean {} ,  std {}".format(self.ob_mean,self.ob_std))
         del env
         self.envs = [functools.partial(self.make_env, i) for i in range(self.envs_per_process)]
+        print("Type and self.envs object type {} and  len {}".format(type(self.envs) , np.shape(self.envs)))
 
     def train(self):
         self.agent.start_interaction(self.envs, nlump=self.hps['nlumps'], dynamics=self.dynamics)
