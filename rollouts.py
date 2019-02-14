@@ -58,18 +58,18 @@ class Rollout(object):
 
     def calculate_reward(self):
 
-        print("Calculate_reward :  self.buf_obs {} , self.buf_obs_last {} , self.buf_acs {}".format(
-            np.shape(self.buf_obs) , np.shape(self.buf_obs_last)  , np.shape(self.buf_acs)) )
+        # print("Calculate_reward :  self.buf_obs {} , self.buf_obs_last {} , self.buf_acs {}".format(
+            # np.shape(self.buf_obs) , np.shape(self.buf_obs_last)  , np.shape(self.buf_acs)) )
         int_rew = self.dynamics.calculate_loss(ob=self.buf_obs,
                                                last_ob=self.buf_obs_last,
                                                acs=self.buf_acs)
-        print("calculate_reward :  intresic reward {}  extrinsic reward {} ".format(
-            np.shape(int_rew) , np.shape(self.buf_ext_rews)))
-        print("calculate reward : intresic reward ", int_rew)
-        print("calculate reward : extrinsic reward ",self.buf_ext_rews)
+        # print("calculate_reward :  intresic reward {}  extrinsic reward {} ".format(
+        #     np.shape(int_rew) , np.shape(self.buf_ext_rews)))
+        # print("calculate reward : intresic reward ", int_rew)
+        # print("calculate reward : extrinsic reward ",self.buf_ext_rews)
         # > this is the reward that is used for learning 
         self.buf_rews[:] = self.reward_fun(int_rew=int_rew, ext_rew=self.buf_ext_rews)
-        print("calculate reward : buf_rews ", self.buf_rews)
+        # print("calculate reward : buf_rews ", self.buf_rews)
         # > it takes the intensic reward 
 
     def rollout_step(self):
