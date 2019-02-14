@@ -72,10 +72,10 @@ class PpoOptimizer(object):
 
     def start_interaction(self, env_fns, dynamics, nlump=2):
         self.loss_names, self._losses = zip(*list(self.to_report.items()))
-        print(" start_interaction : self.loss_names ",self.loss_names)
+        # print(" start_interaction : self.loss_names ",self.loss_names)
 
         params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-        print("start start_interaction : TRAINABLE_VARIABLES " , params)
+        # print("start start_interaction : TRAINABLE_VARIABLES " , params)
         if MPI.COMM_WORLD.Get_size() > 1:
             trainer = MpiAdamOptimizer(learning_rate=self.ph_lr, comm=MPI.COMM_WORLD)
         else:
@@ -110,11 +110,11 @@ class PpoOptimizer(object):
         self.buf_rets = np.zeros((nenvs, self.rollout.nsteps), np.float32)
 
         if self.normrew:
-            print("Calling RewardForwardFilter from start_interaction")
+            # print("Calling RewardForwardFilter from start_interaction")
             self.rff = RewardForwardFilter(self.gamma)
-            print(" received self.rff " , np.shape(self.rff))
+            # print(" received self.rff " , np.shape(self.rff))
             self.rff_rms = RunningMeanStd()
-            print( "received rff_rms mean std ",np.shape(self.rff_rms))
+            # print( "received rff_rms mean std ",np.shape(self.rff_rms))
 
         self.step_count = 0
         self.t_last_update = time.time()
@@ -145,21 +145,21 @@ class PpoOptimizer(object):
             # > also rff.update (rew) passed each row of inc_reward  
             # > where it gets  self.rewems = self.rewems * self.gamma + rews  
             rffs = np.array([self.rff.update(rew) for rew in self.rollout.buf_rews.T]) # shape (128,8)
-            print("update : received rff in update , rffs ",np.shape(rffs))
-            print("update : numpy.ravel shape ",np.shape(rffs.ravel())) # shape (128,8) = 1024
+            # print("update : received rff in update , rffs ",np.shape(rffs))
+            # print("update : numpy.ravel shape ",np.shape(rffs.ravel())) # shape (128,8) = 1024
             # this is the standing point
             # > sending flattened shape of all the rewards from all env's of each step (128)
             # > MPI moments received flattened of shape (1024,)
             rffs_mean, rffs_std, rffs_count = mpi_moments(rffs.ravel())
 
-            print("update : rffs_mean {} , rffs_std {} , rffs_count {} ".format(
-                np.shape(rffs_mean),np.shape(rffs_std),np.shape(rffs_count)))
+            # print("update : rffs_mean {} , rffs_std {} , rffs_count {} ".format(
+            #     np.shape(rffs_mean),np.shape(rffs_std),np.shape(rffs_count)))
             # > single value received or all these three 
             
             self.rff_rms.update_from_moments(rffs_mean, rffs_std ** 2, rffs_count)
             rews = self.rollout.buf_rews / np.sqrt(self.rff_rms.var)
-            print(" update :  final rews {} rff_rms.var {} ".format(
-                np.shape(rews) , np.shape(self.rff_rms.var)))
+            # print(" update :  final rews {} rff_rms.var {} ".format(
+            #     np.shape(rews) , np.shape(self.rff_rms.var)))
             # > rews is (8,128) and  self.rff_rms.var is a single value
 
         else:
@@ -185,10 +185,10 @@ class PpoOptimizer(object):
         # normalize advantages
         if self.normadv:
             m, s = get_mean_and_std(self.buf_advs)
-            print("Normalize ADV batch buffer shape : ",np.shape(self.buf_advs))
+            # print("Normalize ADV batch buffer shape : ",np.shape(self.buf_advs))
             self.buf_advs = (self.buf_advs - m) / (s + 1e-7)
         # norm_advs shape (8,128)
-        print("advantage normalization : ",np.shape(self.buf_advs))
+        # print("advantage normalization : ",np.shape(self.buf_advs))
         envsperbatch = (self.nenvs * self.nsegs_per_env) // self.nminibatches
         envsperbatch = max(1, envsperbatch)
         envinds = np.arange(self.nenvs * self.nsegs_per_env)
@@ -208,8 +208,8 @@ class PpoOptimizer(object):
             (self.ph_ret, resh(self.buf_rets)),
             (self.ph_adv, resh(self.buf_advs)),
         ]
-        print("cppo agent, update :  self.rollout.buf_obs_last " , 
-            np.shape(self.rollout.buf_obs_last.reshape([self.nenvs * self.nsegs_per_env, 1, *self.ob_space.shape])) )
+        # print("cppo agent, update :  self.rollout.buf_obs_last " , 
+        #     np.shape(self.rollout.buf_obs_last.reshape([self.nenvs * self.nsegs_per_env, 1, *self.ob_space.shape])) )
         
         ph_buf.extend([
             (self.dynamics.last_ob,

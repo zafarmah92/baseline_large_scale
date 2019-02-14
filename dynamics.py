@@ -13,16 +13,16 @@ class Dynamics(object):
         self.feat_dim = feat_dim
         self.obs = self.auxiliary_task.obs
         self.last_ob = self.auxiliary_task.last_ob
-        print("Dynamics init : self.last_ob ",np.shape(self.last_ob))
+        # print("Dynamics init : self.last_ob ",np.shape(self.last_ob))
         self.ac = self.auxiliary_task.ac
         self.ac_space = self.auxiliary_task.ac_space
         self.ob_mean = self.auxiliary_task.ob_mean
         self.ob_std = self.auxiliary_task.ob_std
         if predict_from_pixels:
-            print("Dynamics init : predict from pixels ")
+            # print("Dynamics init : predict from pixels ")
             self.features = self.get_features(self.obs, reuse=False)
         else:
-            print("Dynamics init : else, features of something " , np.shape(self.auxiliary_task.features))
+            # print("Dynamics init : else, features of something " , np.shape(self.auxiliary_task.features))
             self.features = tf.stop_gradient(self.auxiliary_task.features)
 
         self.out_features = self.auxiliary_task.next_features
@@ -47,13 +47,13 @@ class Dynamics(object):
         # print(" Dynamics frd get_loss : self.ac {} , self.ac_space.n {}")
         ac = tf.one_hot(self.ac, self.ac_space.n, axis=2)
 
-        print(" Dynamics frd get_loss : self.ac {} , self.ac_space.n {} , ac {} ".
-            format( np.shape( self.ac ),np.shape( self.ac_space.n ),np.shape(ac) ))
+        # print(" Dynamics frd get_loss : self.ac {} , self.ac_space.n {} , ac {} ".
+        #     format( np.shape( self.ac ),np.shape( self.ac_space.n ),np.shape(ac) ))
         sh = tf.shape(ac)
 
         ac = flatten_two_dims(ac)
 
-        print(" Dynamics frd get_loss tf shape: sh {} , ac {} ".format(tf.shape(sh) , tf.shape(ac)))
+        # print(" Dynamics frd get_loss tf shape: sh {} , ac {} ".format(tf.shape(sh) , tf.shape(ac)))
 
         def add_ac(x):
             return tf.concat([x, ac], axis=-1)
@@ -70,7 +70,7 @@ class Dynamics(object):
             for _ in range(4):
                 x = residual(x)
             n_out_features = self.out_features.get_shape()[-1].value
-            print(" Dynamics frd loss : n_out_features ",tf.shape(n_out_features))
+            # print(" Dynamics frd loss : n_out_features ",tf.shape(n_out_features))
             x = tf.layers.dense(add_ac(x), n_out_features, activation=None)
             x = unflatten_first_dim(x, sh)
             # print(" Dynamics frd loss : x unflatten_first_dim {} , self.out_features {}".
@@ -87,11 +87,11 @@ class Dynamics(object):
         sli = lambda i: slice(i * chunk_size, (i + 1) * chunk_size)
         
         # > testing
-        print("dynamics , calculate_loss : slice {} , chunk_size {} ".format(
-            sli , chunk_size))
-        for i in range(n_chunks):
-            print("dynamics , calculate_loss : slice {}  obs {} , last_obs {} , actions {} ".format(
-            sli(i),np.shape(ob[sli(i)]) , np.shape(last_ob[sli(i)])  , np.shape(acs[sli(i)])))
+        # print("dynamics , calculate_loss : slice {} , chunk_size {} ".format(
+        #     sli , chunk_size))
+        # for i in range(n_chunks):
+        #     print("dynamics , calculate_loss : slice {}  obs {} , last_obs {} , actions {} ".format(
+        #     sli(i),np.shape(ob[sli(i)]) , np.shape(last_ob[sli(i)])  , np.shape(acs[sli(i)])))
         # > testing
 
         return np.concatenate([getsess().run(self.loss,

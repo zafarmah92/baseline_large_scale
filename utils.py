@@ -88,7 +88,7 @@ def random_agent_ob_mean_std(env, nsteps=10000):
     ob = np.asarray(env.reset())
     if MPI.COMM_WORLD.Get_rank() == 0:
         obs = [ob]
-        print("::: Entered the random action for 1000 steps ::: ")
+        # print("::: Entered the random action for 1000 steps ::: ")
         for _ in range(nsteps):
             ac = env.action_space.sample() # random action 
             ob, _, done, _ = env.step(ac)
@@ -132,7 +132,7 @@ def add_pos_bias(x):
 
 
 def small_convnet(x, nl, feat_dim, last_nl, layernormalize, batchnorm=False):
-    print(" small_convnet parameters  \n\n")
+    # print(" small_convnet parameters  \n\n")
     # > nl = RELU
     # > feat_dim = 512
     # > last_nl = False
@@ -147,7 +147,7 @@ def small_convnet(x, nl, feat_dim, last_nl, layernormalize, batchnorm=False):
     if last_nl is not None:
         x = last_nl(x)
     if layernormalize:
-        print(" Layer Normalization ")
+        # print(" Layer Normalization ")
         x = layernorm(x)
     return x
 
