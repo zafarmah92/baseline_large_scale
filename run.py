@@ -13,7 +13,6 @@ from baselines import logger
 from baselines.bench import Monitor
 from baselines.common.atari_wrappers import NoopResetEnv, FrameStack
 from mpi4py import MPI
-import numpy as np
 
 from auxiliary_tasks import FeatureExtractor, InverseDynamics, VAE, JustPixels
 from cnn_policy import CnnPolicy
@@ -25,9 +24,7 @@ from wrappers import MontezumaInfoWrapper, make_mario_env, make_robo_pong, make_
 
 
 def start_experiment(**args):
-    # print("start_experiment called  ")
     make_env = partial(make_env_all_params, add_monitor=True, args=args)
-    # print("start_experiment return ")
 
     trainer = Trainer(make_env=make_env,
                       num_timesteps=args['num_timesteps'], hps=args,
@@ -35,18 +32,16 @@ def start_experiment(**args):
     log, tf_sess = get_experiment_environment(**args)
     with log, tf_sess:
         logdir = logger.get_dir()
-        # print("results will be saved to ", logdir)
+        print("results will be saved to ", logdir)
         trainer.train()
 
 
 class Trainer(object):
     def __init__(self, make_env, hps, num_timesteps, envs_per_process):
-        # print("Trainer __init__ is called ")
         self.make_env = make_env
         self.hps = hps
         self.envs_per_process = envs_per_process
         self.num_timesteps = num_timesteps
-        # print("now 1000 ste Env is getting callled ")
         self._set_env_vars()
 
         self.policy = CnnPolicy(
@@ -104,15 +99,11 @@ class Trainer(object):
         self.agent.to_report['feat_var'] = tf.reduce_mean(tf.nn.moments(self.feature_extractor.features, [0, 1])[1])
 
     def _set_env_vars(self):
-        # print("Function _set_env_vars is called ")
         env = self.make_env(0, add_monitor=False)
         self.ob_space, self.ac_space = env.observation_space, env.action_space
         self.ob_mean, self.ob_std = random_agent_ob_mean_std(env)
-        # print("Received mean and standard Deviation mean {} ,  std {}".format(self.ob_mean,self.ob_std))
         del env
         self.envs = [functools.partial(self.make_env, i) for i in range(self.envs_per_process)]
-        # > stacking the number of parallel workers 
-        # print("Type and self.envs object type {} and  len {}".format(type(self.envs) , np.shape(self.envs)))
 
     def train(self):
         self.agent.start_interaction(self.envs, nlump=self.hps['nlumps'], dynamics=self.dynamics)
@@ -128,15 +119,13 @@ class Trainer(object):
 
 
 def make_env_all_params(rank, add_monitor, args):
-
-    # print("make_env_all_params called with rank {} add_monitor {}".format(rank,add_monitor))
     if args["env_kind"] == 'atari':
         env = gym.make(args['env'])
         assert 'NoFrameskip' in env.spec.id
         env = NoopResetEnv(env, noop_max=args['noop_max'])
-        env = MaxAndSkipEnv(env, skip=4) # done
-        env = ProcessFrame84(env, crop=False) # in wrap_frame
-        env = FrameStack(env, 4) # yes in wrapdeep_mind
+        env = MaxAndSkipEnv(env, skip=4)
+        env = ProcessFrame84(env, crop=False)
+        env = FrameStack(env, 4)
         env = ExtraTimeLimit(env, args['max_episode_steps'])
         if 'Montezuma' in args['env']:
             env = MontezumaInfoWrapper(env)
@@ -183,19 +172,19 @@ def add_environments_params(parser):
 def add_optimization_params(parser):
     parser.add_argument('--lambda', type=float, default=0.95)
     parser.add_argument('--gamma', type=float, default=0.99)
-    parser.add_argument('--nminibatches', type=int, default=128)
+    parser.add_argument('--nminibatches', type=int, default=8)
     parser.add_argument('--norm_adv', type=int, default=1)
     parser.add_argument('--norm_rew', type=int, default=1)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--ent_coeff', type=float, default=0.001)
     parser.add_argument('--nepochs', type=int, default=3)
-    parser.add_argument('--num_timesteps', type=int, default=int(1e7))
+    parser.add_argument('--num_timesteps', type=int, default=int(1e8))
 
 
 def add_rollout_params(parser):
     parser.add_argument('--nsteps_per_seg', type=int, default=128)
     parser.add_argument('--nsegs_per_env', type=int, default=1)
-    parser.add_argument('--envs_per_process', type=int, default=8)
+    parser.add_argument('--envs_per_process', type=int, default=128)
     parser.add_argument('--nlumps', type=int, default=1)
 
 
