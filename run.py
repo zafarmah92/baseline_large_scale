@@ -183,7 +183,7 @@ def add_environments_params(parser):
 def add_optimization_params(parser):
     parser.add_argument('--lambda', type=float, default=0.95)
     parser.add_argument('--gamma', type=float, default=0.99)
-    parser.add_argument('--nminibatches', type=int, default=8)
+    parser.add_argument('--nminibatches', type=int, default=128)
     parser.add_argument('--norm_adv', type=int, default=1)
     parser.add_argument('--norm_rew', type=int, default=1)
     parser.add_argument('--lr', type=float, default=1e-4)
@@ -195,7 +195,7 @@ def add_optimization_params(parser):
 def add_rollout_params(parser):
     parser.add_argument('--nsteps_per_seg', type=int, default=128)
     parser.add_argument('--nsegs_per_env', type=int, default=1)
-    parser.add_argument('--envs_per_process', type=int, default=8)
+    parser.add_argument('--envs_per_process', type=int, default=12)
     parser.add_argument('--nlumps', type=int, default=1)
 
 
